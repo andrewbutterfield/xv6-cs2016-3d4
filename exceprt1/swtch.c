@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+uint timeout = 100 ;
+
 void swtch(struct context **old, struct context *new){
 
    printf("Switching to running process %d,%d\n",(int)(c->proc),timeout);

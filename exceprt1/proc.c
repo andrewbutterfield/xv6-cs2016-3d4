@@ -22,6 +22,7 @@ int ncpu;
 struct proc *p;
 struct cpu *c = cpus;
 
+
 void
 scheduler(void)
 { int runnableFound;
@@ -37,6 +38,7 @@ scheduler(void)
     // Loop over process table looking for process to run.
     // acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+
       if(p->state != RUNNABLE)
         continue;
 
@@ -53,7 +55,6 @@ scheduler(void)
       swtch(&(c->scheduler), p->context);
       // p->state shoudl not be running on return here.
       //switchkvm();
-
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;

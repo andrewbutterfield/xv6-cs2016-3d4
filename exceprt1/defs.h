@@ -6,8 +6,8 @@ struct spinlock;
 
 struct proc *p;
 struct cpu *c;
-uint timeout ;
 void scheduler(void);
 
 // swtch.S
-void            swtch(struct context**, struct context*);
+void swtch(struct context**, struct context*);
+uint timeout ;
