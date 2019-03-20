@@ -1,10 +1,5 @@
 #include "types.h"
 #include "defs.h"
-// #include "param.h"
-// #include "memlayout.h"
-// #include "mmu.h"
-// #include "x86.h"
-// #include "spinlock.h"
 #include "proc.h"
 
 #define NCPU 1
@@ -13,12 +8,6 @@ struct cpu cpus[NCPU];
 int ncpu;
 
 
-struct cpu*
-mycpu(void)
-{
-      return &cpus[0];
-}
-
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
 // Scheduler never returns.  It loops, doing:
@@ -26,11 +15,16 @@ mycpu(void)
 //  - swtch to start running that process
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
+
+// local to scheduler in xv6, but here we need them to persist outside
+// xv6 runs scheduler as a "coroutine" via swtch,
+// but here swtch is just a regular procedure call.
+struct proc *p;
+struct cpu *c = cpus;
+
 void
 scheduler(void)
 {
-  struct proc *p;
-  struct cpu *c = mycpu();
   c->proc = 0;
 
   for(;;){
@@ -51,6 +45,7 @@ scheduler(void)
       p->state = RUNNING;
 
       swtch(&(c->scheduler), p->context);
+      // p->state shoudl not be running on return here.
       //switchkvm();
 
       // Process is done running for now.
