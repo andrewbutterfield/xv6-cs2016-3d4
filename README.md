@@ -11,10 +11,10 @@ Here we are taking excerpts from **xv6** that allow the students to explore some
 in a simpler setting, and make it easier to automatically script and observe behaviours.
 
 ## Acknowledgment
-The file `README` (as distinct from this file `README.md`) is unchanged from the xv6-public repo. We are very grateful to the teaching staff at MIT for developing and sharing this resource.
+The file `README` (as distinct from this file `README.md`) is unchanged from the `xv6-public` repo. We are very grateful to the teaching staff at MIT for developing and sharing this resource.
 
 ## Excerpt 1 - the Scheduler
 
-The xv6 scheduler is very simple: run down the process table and select the first runnable process.
+The **xv6** scheduler is very simple: run down the process table and select the first runnable process.
 
 The plan is to be able to enhance it to be a little smarter.
