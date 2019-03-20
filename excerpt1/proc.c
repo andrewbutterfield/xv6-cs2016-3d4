@@ -53,8 +53,8 @@ scheduler(void)
       p->state = RUNNING;
 
 
-      swtch(&(c->scheduler), p->context);
-      // p->state shoudl not be running on return here.
+      swtch(c->proc);
+      // p->state should not be running on return here.
       //switchkvm();
       // Process is done running for now.
       // It should have changed its p->state before coming back.

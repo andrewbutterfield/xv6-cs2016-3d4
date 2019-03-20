@@ -1,6 +1,4 @@
-struct context;
 struct proc;
-struct spinlock;
 
 // proc.c
 
@@ -9,5 +7,5 @@ struct cpu *c;
 void scheduler(void);
 
 // swtch.S
-void swtch(struct context**, struct context*);
+void swtch(struct proc *p);
 uint swtchLimit ;

@@ -6,9 +6,9 @@
 
 uint swtchLimit = 100 ;
 
-void swtch(struct context **old, struct context *new){
+void swtch(struct proc *p){
 
-   printf("Switching to running process %d,%d\n",(int)(c->proc),swtchLimit);
+   printf("Switching to running process %d,%d\n",(int)p,swtchLimit);
    p->state = SLEEPING;
 
    if(!swtchLimit--) {
