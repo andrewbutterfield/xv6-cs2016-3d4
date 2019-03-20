@@ -3,7 +3,7 @@
 #include "proc.h"
 #include <stdio.h>
 
-void initPtable () {
+void initptable () {
   struct proc *p;
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -14,7 +14,7 @@ void initPtable () {
 
 int main (int argc, const char * argv[]) {
 
-  initPtable();
+  initptable();
   printf("Scheduler simulation NYI\n...running scheduler anyway\nHold on!\n");
   scheduler();
   return 0;

@@ -24,18 +24,23 @@ struct cpu *c = cpus;
 
 void
 scheduler(void)
-{
+{ int runnableFound;
+
   c->proc = 0;
 
-  for(;;){
+  runnableFound = 1 ; // force one pass over ptable
+
+  while(runnableFound){
     // Enable interrupts on this processor.
     // sti();
-
+    runnableFound = 0;
     // Loop over process table looking for process to run.
     // acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+
+      runnableFound = 1;
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -43,6 +48,7 @@ scheduler(void)
       c->proc = p;
       //switchuvm(p);
       p->state = RUNNING;
+
 
       swtch(&(c->scheduler), p->context);
       // p->state shoudl not be running on return here.

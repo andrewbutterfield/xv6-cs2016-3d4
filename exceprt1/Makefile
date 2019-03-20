@@ -3,7 +3,7 @@ OBJS = swtch.o proc.o main.o\
 sim : $(OBJS)
 	cc -o sim $(OBJS)
 
-%.o: %.c
+%.o: %.c %.h
 	cc -c -o $@ $<
 
 clean :

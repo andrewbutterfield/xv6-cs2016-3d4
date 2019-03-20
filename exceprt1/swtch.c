@@ -6,6 +6,6 @@
 void swtch(struct context **old, struct context *new){
 
    printf("Switching to running process %d\n",(int)(c->proc));
-   p->state = RUNNABLE;
+   p->state = SLEEPING;
 
 }

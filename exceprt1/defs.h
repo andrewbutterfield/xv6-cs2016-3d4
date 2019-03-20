@@ -3,7 +3,7 @@ struct proc;
 struct spinlock;
 
 // proc.c
-void            scheduler(void) __attribute__((noreturn));
+void            scheduler(void);
 
 struct proc *p;
 struct cpu *c;
