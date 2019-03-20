@@ -8,18 +8,18 @@ each describing the overall behaviour of one instance of being in the `RUNNING` 
 The running of the scheduler is then determined by that, and continues until there is no `RUNNABLE` process,
 or a pre-determined limit on the number of process switches has been reached.
 
-The only process states we consider are `UNUSED` (0), `SLEEPING` (2), `RUNNABLE` (3), and `RUNNING` (4).
+The only process states we consider are `UNUSED` (0), `SLEEPING` (2), `RUNNABLE` (3), `RUNNING` (4), and `ZOMBIE` (5).
 
 ## File structure
 
-File top-level:
+File top-level, where `0 <= l <= h <= NPROC-1`:
 
     swtchLimit
-    <ptable[0]>
-    <pactions.0>
+    <ptable[l]>
+    <pactions.l>
     ...
-    <ptable[NPROC-1]>
-    <pactions.NPROC-1>
+    <ptable[h]>
+    <pactions.h>
 
 Process table entry:
 
@@ -35,3 +35,5 @@ Action:
              | WAIT // waiting, becomes SLEEPING
              | WAKE.p // wakes process p, stays RUNNABLE
              | KILL.p // kills process p, stays RUNNABLE
+             | FORK.p // forks process p, stays RUNNABLE
+             | EXIT // exits, becomes ZOMBIE
