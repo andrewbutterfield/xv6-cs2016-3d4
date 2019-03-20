@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-uint timeout = 100 ;
+uint swtchLimit = 100 ;
 
 void swtch(struct context **old, struct context *new){
 
-   printf("Switching to running process %d,%d\n",(int)(c->proc),timeout);
-   p->state = RUNNABLE;
+   printf("Switching to running process %d,%d\n",(int)(c->proc),swtchLimit);
+   p->state = SLEEPING;
 
-   if(!timeout--) {
-     printf("timeout!" );
+   if(!swtchLimit--) {
+     printf("switch-limit reached!\n" );
      exit(0);
    }
 

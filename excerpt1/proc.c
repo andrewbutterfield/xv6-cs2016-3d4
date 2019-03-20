@@ -1,6 +1,7 @@
 #include "types.h"
 #include "defs.h"
 #include "proc.h"
+#include <stdio.h>
 
 #define NCPU 1
 
@@ -25,16 +26,16 @@ struct cpu *c = cpus;
 
 void
 scheduler(void)
-{ int runnableFound;
+{ int runnableFound; // DO NOT MODIFY/DELETE
 
   c->proc = 0;
 
   runnableFound = 1 ; // force one pass over ptable
 
-  while(runnableFound){
+  while(runnableFound){ // DO NOT MODIFY
     // Enable interrupts on this processor.
     // sti();
-    runnableFound = 0;
+    runnableFound = 0; // DO NOT MODIFY
     // Loop over process table looking for process to run.
     // acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -42,7 +43,7 @@ scheduler(void)
       if(p->state != RUNNABLE)
         continue;
 
-      runnableFound = 1;
+      runnableFound = 1; // DO NOT MODIFY/DELETE/BYPASS
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -62,4 +63,5 @@ scheduler(void)
     // release(&ptable.lock);
 
   }
+  printf("No RUNNABLE process!\n");
 }

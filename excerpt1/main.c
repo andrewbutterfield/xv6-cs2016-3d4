@@ -15,7 +15,7 @@ void initptable () {
 int main (int argc, const char * argv[]) {
 
   initptable();
-  timeout = 42;
+  swtchLimit = 5;
   printf("Scheduler simulation NYI\n...running scheduler anyway\nHold on!\n");
   scheduler();
   return 0;

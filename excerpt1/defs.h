@@ -10,4 +10,4 @@ void scheduler(void);
 
 // swtch.S
 void swtch(struct context**, struct context*);
-uint timeout ;
+uint swtchLimit ;
