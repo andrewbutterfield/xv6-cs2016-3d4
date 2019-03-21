@@ -27,13 +27,12 @@ Process table entry:
     
 Process action entry:
 
-    <pactions.p> = ACT p n <act[0]> .. <act[n-1]>
+    <pactions.p> = ACT p <act[0]> .. <act[n-1]> EXIT
     
 Action:
 
     <act[i]> = CPU  // cpu-bound, stays RUNNABLE
              | WAIT // waiting, becomes SLEEPING
-             | WAKE.p // wakes process p, stays RUNNABLE
-             | KILL.p // kills process p, stays RUNNABLE
-             | FORK.p // forks process p, stays RUNNABLE
-             | EXIT // exits, becomes ZOMBIE
+             | WAKE p // wakes process p, stays RUNNABLE
+             | KILL p // kills process p, stays RUNNABLE
+             | FORK p // forks process p, stays RUNNABLE
