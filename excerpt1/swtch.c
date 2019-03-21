@@ -9,31 +9,51 @@ uint swtchLimit = 100 ;
 
 enum actiontype { EXIT, CPU, WAIT, WAKE, FORK, KILL } ;
 
+void printaction(enum actiontype atype){
+  switch(atype) {
+    case EXIT : printf("EXIT"); break;
+    case CPU  : printf("CPU"); break;
+    case WAIT : printf("WAIT"); break;
+    case WAKE : printf("WAKE"); break;
+    case FORK : printf("FORK"); break;
+    case KILL : printf("KILL"); break;
+    default : printf("????");
+  }
+}
+
 struct action {
   enum actiontype atype;
   int tgtp;              // p parameter for WAKE..KILL
 };
 
-int initaction(struct action *a){
-  a->atype = EXIT;
-  a->tgtp = -1;
-  return 0;
-}
-
-#define MAXACT 30
+#define MAXACT 20
 
 struct acts {
   struct action *next;
   struct action actions[MAXACT];
 };
 
-int initact(struct acts *a){
-  initaction(a->actions);
-  a->next = a->actions;
+struct acts pactions[NPROC];
+
+int initaction(struct action *a){
+  a->atype = 999;
+  a->tgtp = -1;
   return 0;
 }
 
-struct acts pactions[NPROC];
+int initact(struct acts *as){
+
+  struct action *a;
+  int i;
+
+  a = as->actions;
+  for(i=0;i<MAXACT;i++){
+    initaction(&a[i]);
+  }
+  as->next = NULL;
+  return 0;
+}
+
 
 int initpactions() {
   struct acts *a;
@@ -57,7 +77,7 @@ int readaction(struct acts *p, int l_a){
 
   // CPU | WAIT | WAKE 2 | FORK 4 | KILL 0 | EXIT
   rc = scanf("%s",l_types);
-  printf("rc=%d, types=%s\n",rc,l_types);
+  // printf("rc=%d, types=%s\n",rc,l_types);
   arc=1;
   if (strcmp(l_types,"CPU")==0) {
     l_atype = CPU; l_tgtp = -1;
@@ -75,7 +95,9 @@ int readaction(struct acts *p, int l_a){
   } else if (strcmp(l_types,"EXIT")==0) {
     l_atype = EXIT; l_tgtp = -1; arc=0;
   }
-  printf("atype=%d, p=%d\n",l_atype,l_tgtp);
+  printf(" ");printaction(l_atype);
+  if(l_tgtp>=0) {printf("(%d)",l_tgtp);}
+  printf("\n");
   p->next->atype = l_atype;
   p->next->tgtp = l_tgtp;
 
@@ -96,34 +118,20 @@ int readactions(){
 
   // ACT 3
   rc = scanf( "%s %d", stuff, &l_p);
-  printf("rc=%d, stuff=%s, p=%d\n",rc,stuff,l_p);
+  // printf("rc=%d, stuff=%s, p=%d\n",rc,stuff,l_p);
   p = &pactions[l_p];
   l_a=0;
   while(readaction(p,l_a)){
-    printf("Action %d read!\n",l_a);
+    // printf("Action %d read!\n",l_a);
     l_a++;
   }
   p->next = p->actions;
+  printf("Actions:\n");
   for(a = p->actions; a < &p->actions[MAXACT]; a++) {
-    printf("Action '%d', proc:%d\n",a->atype,a->tgtp);
+    printaction(a->atype);
+    if(a->tgtp >= 0) {printf("(%d)",a->tgtp);}
+    printf("\n");
   }
-
-
-
-  // rc = scanf( "%s %d %u %d %d %d %d %s"
-  //       , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
-  //  printf("rc=%d, stuff=%s\n",rc,stuff);
-  //  if(rc==8){
-  //    printf( "Proc %d %u %d %d %d %d %s!\n"
-  //          , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
-  //    p = &ptable.proc[l_p];
-  //    p->sz  = l_sz;
-  //    p->state = l_state;
-  //    p->pid  = l_pid;
-  //    p->parent = l_parent_p == -1 ? NULL : &ptable.proc[l_parent_p];
-  //    p->killed = l_killed;
-  //    //strcpy(p->name,l_name);
-  //   }
   return rc;
 }
 

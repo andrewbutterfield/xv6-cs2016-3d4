@@ -36,7 +36,7 @@ int readproc() { // returns 0 if not a proc, 1 otherwise
 // PROC 0 10 3 1111 0 0 proc1
   rc = scanf( "%s %d %u %d %d %d %d %s"
     , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
-  printf("rc=%d, stuff=%s\n",rc,stuff);
+  // printf("rc=%d, stuff=%s\n",rc,stuff);
   if(rc==8 && strcmp(stuff,"PROC")==0){
     prc=1;
     printf( "Proc %d %u %d %d %d %d %s!\n"
