@@ -17,7 +17,7 @@ void initptable () {
   }
 }
 
-int readproc() {
+int readproc() { // returns 0 if not a proc, 1 otherwise
   int l_p; // ptable index
   uint l_sz;                     // Size of process memory (bytes)
   int l_state;        // Process state
@@ -29,25 +29,29 @@ int readproc() {
 
   int rc;
   struct proc *p;
+  int prc;
 
   l_p=999; l_sz=999; l_state=999; l_pid=999; l_parent_p=999; l_killed=999;
 
-   // PROC 0 10 3 1111 0 0 proc1
-   rc = scanf( "%s %d %u %d %d %d %d %s"
-        , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
-   printf("rc=%d, stuff=%s\n",rc,stuff);
-   if(rc==8){
-     printf( "Proc %d %u %d %d %d %d %s!\n"
-           , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
-     p = &ptable.proc[l_p];
-     p->sz  = l_sz;
-     p->state = l_state;
-     p->pid  = l_pid;
-     p->parent = l_parent_p == -1 ? NULL : &ptable.proc[l_parent_p];
-     p->killed = l_killed;
-     strcpy(p->name,l_name);
+// PROC 0 10 3 1111 0 0 proc1
+  rc = scanf( "%s %d %u %d %d %d %d %s"
+    , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
+  printf("rc=%d, stuff=%s\n",rc,stuff);
+  if(rc==8 && strcmp(stuff,"PROC")==0){
+    prc=1;
+    printf( "Proc %d %u %d %d %d %d %s!\n"
+         , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
+    p = &ptable.proc[l_p];
+    p->sz  = l_sz;
+    p->state = l_state;
+    p->pid  = l_pid;
+    p->parent = l_parent_p == -1 ? NULL : &ptable.proc[l_parent_p];
+    p->killed = l_killed;
+    strcpy(p->name,l_name);
+  } else {
+    prc=0;
   }
-  return rc;
+  return prc;
 }
 
 
@@ -55,18 +59,14 @@ void loadtables() {
 
 
   scanf("%u",&swtchLimit);
-  //while(!feof(stdin)){
-    readproc();
+  while(readproc()){
     readactions();
-  //}
+  }
 }
 
 int main (int argc, const char * argv[]) {
 
-  printf("UNUSED=%d\n",UNUSED);
-  printf("RUNNABLE=%d\n",RUNNABLE);
-  printf("RUNNING=%d\n",RUNNING);
-  printf("SLEEPING=%d\n",SLEEPING);
+  printf("\n\tWelcome to the xv6 Scheduler Simulator!\n\n");
   initptable();
   initpactions();
   loadtables();
