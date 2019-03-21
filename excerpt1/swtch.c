@@ -3,6 +3,7 @@
 #include "proc.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 uint swtchLimit = 100 ;
 
@@ -45,37 +46,47 @@ int initpactions() {
 
 
 int readactions(){
-  // ACT 3 CPU CPU CPU CPU EXIT
-  return 0;
-  int l_p; // ptable index
-  uint l_sz;                     // Size of process memory (bytes)
-  int l_state;        // Process state
-  int l_pid;                     // Process ID
-  int l_parent_p;         // Parent process ptable index
-  int l_killed;                  // If non-zero, have been killed
-  char l_name[17];               // Process name (debugging)
+
+  int l_p; // pactions index
+  char l_types[10];
+  enum actiontype l_atype;
+  int l_tgtp; // target process index
   char stuff[6];
 
   int rc;
   struct proc *p;
 
-  l_p=999; l_sz=999; l_state=999; l_pid=999; l_parent_p=999; l_killed=999;
+  l_p=999; l_atype=999; l_tgtp=999;
 
-   // PROC 0 10 3 1111 0 0 proc1
-   rc = scanf( "%s %d %u %d %d %d %d %s"
-        , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
-   printf("rc=%d, stuff=%s\n",rc,stuff);
-   if(rc==8){
-     printf( "Proc %d %u %d %d %d %d %s!\n"
-           , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
-     p = &ptable.proc[l_p];
-     p->sz  = l_sz;
-     p->state = l_state;
-     p->pid  = l_pid;
-     p->parent = l_parent_p == -1 ? NULL : &ptable.proc[l_parent_p];
-     p->killed = l_killed;
-     //strcpy(p->name,l_name);
+  // ACT 3
+  rc = scanf( "%s %d", stuff, &l_p);
+  printf("rc=%d, stuff=%s, p=%d\n",rc,stuff,l_p);
+  // CPU | WAIT | WAKE 2 | FORK 4 | KILL 0 | EXIT
+  rc = scanf("%s",l_types);
+  printf("rc=%d, types=%s\n",rc,l_types);
+  if (strcmp(l_types,"CPU")==0) {
+   l_atype = CPU;
+ } else if (strcmp(l_types,"WAIT")==0) {
+   l_atype = WAIT;
+  } else {
+   l_atype = EXIT;
   }
+  printf("atype=%d\n,",l_atype);
+
+  // rc = scanf( "%s %d %u %d %d %d %d %s"
+  //       , stuff, &l_p, &l_sz, &l_state, &l_pid, &l_parent_p, &l_killed, l_name );
+  //  printf("rc=%d, stuff=%s\n",rc,stuff);
+  //  if(rc==8){
+  //    printf( "Proc %d %u %d %d %d %d %s!\n"
+  //          , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
+  //    p = &ptable.proc[l_p];
+  //    p->sz  = l_sz;
+  //    p->state = l_state;
+  //    p->pid  = l_pid;
+  //    p->parent = l_parent_p == -1 ? NULL : &ptable.proc[l_parent_p];
+  //    p->killed = l_killed;
+  //    //strcpy(p->name,l_name);
+  //   }
   return rc;
 }
 

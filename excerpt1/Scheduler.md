@@ -34,5 +34,5 @@ Action:
     <act[i]> = CPU  // cpu-bound, stays RUNNABLE
              | WAIT // waiting, becomes SLEEPING
              | WAKE p // wakes process p, stays RUNNABLE
-             | KILL p // kills process p, stays RUNNABLE
              | FORK p // forks process p, stays RUNNABLE
+             | KILL p // kills process p, stays RUNNABLE
