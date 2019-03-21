@@ -9,7 +9,7 @@ uint swtchLimit = 100 ;
 void swtch(struct proc *p){
 
    printf("Switching to running process %d,%d\n",(int)p,swtchLimit);
-   p->state = SLEEPING;
+   p->state = RUNNABLE;
 
    if(!swtchLimit--) {
      printf("switch-limit reached!\n" );
