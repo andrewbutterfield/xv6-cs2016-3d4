@@ -39,8 +39,9 @@ int readproc() { // returns 0 if not a proc, 1 otherwise
   // printf("rc=%d, stuff=%s\n",rc,stuff);
   if(rc==8 && strcmp(stuff,"PROC")==0){
     prc=1;
-    printf( "Proc %d %u %d %d %d %d %s!\n"
-         , l_p, l_sz, l_state, l_pid, l_parent_p, l_killed, l_name);
+    printf( "Proc %d %u ", l_p, l_sz);
+    printstate(l_state);
+    printf( " 0x%x %d %d '%s'\n", l_pid, l_parent_p, l_killed, l_name);
     p = &ptable.proc[l_p];
     p->sz  = l_sz;
     p->state = l_state;

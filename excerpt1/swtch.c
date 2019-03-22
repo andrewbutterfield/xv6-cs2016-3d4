@@ -17,7 +17,7 @@ void printaction(enum actiontype atype){
     case WAKE : printf("WAKE"); break;
     case FORK : printf("FORK"); break;
     case KILL : printf("KILL"); break;
-    default : printf("????");
+    default   : printf("????");
   }
 }
 

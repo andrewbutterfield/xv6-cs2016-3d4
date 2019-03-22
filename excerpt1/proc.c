@@ -1,13 +1,24 @@
 #include "types.h"
 #include "defs.h"
-#include "proc.h"
 #include <stdio.h>
+#include "proc.h"
 
 #define NCPU 1
 
 struct cpu cpus[NCPU];
 int ncpu;
 
+void printstate(enum procstate pstate){ // DO NOT MODIFY
+  switch(pstate) {
+    case UNUSED   : printf("UNUSED");   break;
+    case EMBRYO   : printf("EMBRYO");   break;
+    case SLEEPING : printf("SLEEPING"); break;
+    case RUNNABLE : printf("RUNNABLE"); break;
+    case RUNNING  : printf("RUNNING");  break;
+    case ZOMBIE   : printf("ZOMBIE");   break;
+    default       : printf("????????");
+  }
+}
 
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -17,9 +28,9 @@ int ncpu;
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
 
-// local to scheduler in xv6, but here we need them to persist outside
-// xv6 runs scheduler as a "coroutine" via swtch,
-// but here swtch is just a regular procedure call.
+// local to scheduler in xv6, but here we need them to persist outside,
+// because while xv6 runs scheduler as a "coroutine" via swtch,
+// here swtch is just a regular procedure call.
 struct proc *p;
 struct cpu *c = cpus;
 

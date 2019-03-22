@@ -1,7 +1,8 @@
 struct proc;
 
 // proc.c
-
+enum procstate;
+void printstate(enum procstate pstate);
 struct proc *p;
 struct cpu *c;
 void scheduler(void);
