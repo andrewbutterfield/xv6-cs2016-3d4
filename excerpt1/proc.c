@@ -1,3 +1,6 @@
+// ONLY MODIFY CODE BELOW THE NEXT OCCURENCE OF THE FOLLOWING LINE !
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #include "types.h"
 #include "defs.h"
 #include <stdio.h>
@@ -34,6 +37,8 @@ void printstate(enum procstate pstate){ // DO NOT MODIFY
 struct proc *p;
 struct cpu *c = cpus;
 
+// +++++++ ONLY MODIFY BELOW THIS LINE ++++++++++++++++++++++++++++++
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void
 scheduler(void)
