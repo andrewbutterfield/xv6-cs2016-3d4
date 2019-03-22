@@ -23,7 +23,7 @@ File top-level, where `0 <= l <= h <= NPROC-1`:
 
 Process table entry:
 
-    <ptable[p]> = PROC p sz pstate pid parent killed name
+    <ptable[p]> = PROC p sz pstate parent killed name
     
 Process action entry:
 
@@ -31,8 +31,11 @@ Process action entry:
     
 Action:
 
-    <act[i]> = CPU  // cpu-bound, stays RUNNABLE
+    <act[i]> = EXIT // donem becomes ZOMBIE
+             | CPU  // cpu-bound, stays RUNNABLE
              | WAIT // waiting, becomes SLEEPING
              | WAKE p // wakes process p, stays RUNNABLE
              | FORK p // forks process p, stays RUNNABLE
              | KILL p // kills process p, stays RUNNABLE
+
+At present all are implemented except `FORK`.
