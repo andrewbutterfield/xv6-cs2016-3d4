@@ -64,7 +64,7 @@ scheduler(void)
       p->state = RUNNING;
 
 
-      swtch(c->proc);
+      swtch(p);
       // p->state should not be running on return here.
       //switchkvm();
       // Process is done running for now.

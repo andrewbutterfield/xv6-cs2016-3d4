@@ -9,7 +9,7 @@ uint swtchLimit = 100 ;
 
 enum actiontype { EXIT, CPU, WAIT, WAKE, FORK, KILL } ;
 
-void printaction(enum actiontype atype){
+void printacttype(enum actiontype atype){
   switch(atype) {
     case EXIT : printf("EXIT"); break;
     case CPU  : printf("CPU"); break;
@@ -25,6 +25,11 @@ struct action {
   enum actiontype atype;
   int tgtp;              // p parameter for WAKE..KILL
 };
+
+void printaction(struct action *a){
+  printacttype(a->atype);
+  if(a->tgtp>=0) {printf("(%d)",a->tgtp);}
+}
 
 #define MAXACT 20
 
@@ -65,7 +70,7 @@ int initpactions() {
 }
 
 // if action is EXIT, return 0, otherwise one.
-int readaction(struct acts *p, int l_a){
+int readaction(struct acts *as, int l_a){
   char l_types[10];
   enum actiontype l_atype;
   int l_tgtp; // target process index
@@ -73,7 +78,7 @@ int readaction(struct acts *p, int l_a){
   int arc;
 
   l_atype=999; l_tgtp=999;
-  p->next = &p->actions[l_a];
+  as->next = &as->actions[l_a];
 
   // CPU | WAIT | WAKE 2 | FORK 4 | KILL 0 | EXIT
   rc = scanf("%s",l_types);
@@ -95,11 +100,11 @@ int readaction(struct acts *p, int l_a){
   } else if (strcmp(l_types,"EXIT")==0) {
     l_atype = EXIT; l_tgtp = -1; arc=0;
   }
-  printf(" ");printaction(l_atype);
-  if(l_tgtp>=0) {printf("(%d)",l_tgtp);}
+  as->next->atype = l_atype;
+  as->next->tgtp = l_tgtp;
+  printf(" ");
+  printaction(as->next);
   printf("\n");
-  p->next->atype = l_atype;
-  p->next->tgtp = l_tgtp;
 
   return arc;
 }
@@ -110,7 +115,7 @@ int readactions(){
   char stuff[6];
 
   int rc;
-  struct acts *p;
+  struct acts *as;
   int l_a; // actions index
   struct action *a;
 
@@ -119,30 +124,57 @@ int readactions(){
   // ACT 3
   rc = scanf( "%s %d", stuff, &l_p);
   // printf("rc=%d, stuff=%s, p=%d\n",rc,stuff,l_p);
-  p = &pactions[l_p];
+  as = &pactions[l_p];
   l_a=0;
-  while(readaction(p,l_a)){
+  while(readaction(as,l_a)){
     // printf("Action %d read!\n",l_a);
     l_a++;
   }
-  p->next = p->actions;
-  printf("Actions:\n");
-  for(a = p->actions; a < &p->actions[MAXACT]; a++) {
-    printaction(a->atype);
-    if(a->tgtp >= 0) {printf("(%d)",a->tgtp);}
-    printf("\n");
-  }
+  // p->next = p->actions;
+  // printf("Actions:\n");
+  // for(a = p->actions; a < &p->actions[MAXACT]; a++) {
+  //   printacttype(a->atype);
+  //   if(a->tgtp >= 0) {printf("(%d)",a->tgtp);}
+  //   printf("\n");
+  // }
+  as->next = as->actions;
   return rc;
 }
 
 
+struct action *getnextaction(struct proc *p){
+  int l_pid;
+  struct acts *as;
+  struct action *a;
 
+  l_pid = p->pid;
+  as = &pactions[l_pid];
+  a = (as->next)++;
+  return a;
+}
 
 
 void swtch(struct proc *p){
+   struct action *a;
 
-   printf("Switching to running process %d,%d\n",(int)p,swtchLimit);
-   p->state = RUNNABLE;
+   printf("RUN: %s doing ",p->name);
+   a = getnextaction(p);
+   printaction(a); printf("\n");
+
+   switch(a->atype) {
+     case EXIT : p->state = ZOMBIE;   break;
+     case CPU  : p->state = RUNNABLE; break;
+     case WAIT : p->state = SLEEPING; break;
+     case WAKE :
+       ptable.proc[a->tgtp].state = RUNNABLE;
+       p->state = RUNNABLE; break;
+     case KILL :
+       ptable.proc[a->tgtp].state = ZOMBIE;
+       p->state = RUNNABLE; break;
+     // WAKE/FORK/KILL nyi
+     case FORK : p->state = RUNNABLE; break;
+     default   : p->state = ZOMBIE;
+   }
 
    if(!swtchLimit--) {
      printf("switch-limit reached!\n" );
