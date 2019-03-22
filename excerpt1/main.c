@@ -55,9 +55,7 @@ int readproc() { // returns 0 if not a proc, 1 otherwise
   return prc;
 }
 
-
 void loadtables() {
-
 
   scanf("%u",&swtchLimit);
   while(readproc()){
@@ -71,7 +69,6 @@ int main (int argc, const char * argv[]) {
   initptable();
   initpactions();
   loadtables();
-  printf("Scheduler simulation very simple right now\n");
   scheduler();
   return 0;
 
